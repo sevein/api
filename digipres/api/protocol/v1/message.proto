@@ -1,0 +1,37 @@
+syntax = "proto3";
+
+package digipres.api.protocol.v1;
+
+import "buf/validate/validate.proto";
+import "digipres/api/protocol/v1/i18n.proto";
+import "google/protobuf/timestamp.proto";
+
+message InformationObject {
+  string id = 1;
+  string identifier = 2;
+  string parent_id = 3;
+  TranslatedString title = 4;
+  TranslatedString scope_and_content = 5;
+  google.protobuf.Timestamp created_at = 6 [(buf.validate.field).timestamp.lt_now = true];
+  google.protobuf.Timestamp updated_at = 7;
+  option (buf.validate.message).cel = {
+    id: "information_object.updated_at",
+    message: "Update at date must be after creation date",
+    expression: "this.updated_at > this.created_date"
+  };
+}
+
+message DigitalObject {
+  string id = 1;
+  string parent_id = 2;
+  string information_object_id = 3;
+  string checksum = 4;
+  ChecksumType checksum_type = 5;
+}
+
+enum ChecksumType {
+  CHECKSUM_TYPE_UNSPECIFIED = 0;
+  CHECKSUM_TYPE_MD5 = 1;
+  CHECKSUM_TYPE_SHA1 = 2;
+  CHECKSUM_TYPE_SHA256 = 3;
+}

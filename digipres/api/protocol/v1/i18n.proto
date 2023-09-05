@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+package digipres.api.protocol.v1;
+
+import "buf/validate/validate.proto";
+
+message TranslatedString {
+  map<string, string> translations = 1 [(buf.validate.field).map.values.string.min_len = 1];
+}
