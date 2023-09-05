@@ -35,3 +35,24 @@ enum ChecksumType {
   CHECKSUM_TYPE_SHA1 = 2;
   CHECKSUM_TYPE_SHA256 = 3;
 }
+
+message File {
+  string name = 1;
+  oneof file_type {
+    Image image_metadata = 2;
+    Video video_metadata = 3;
+  }
+}
+
+message Image {
+  int32 width = 1;
+  int32 height = 2;
+  string format = 3;
+}
+
+message Video {
+  int32 width = 1;
+  int32 height = 2;
+  int64 duration = 3;
+  string format = 4;
+}
