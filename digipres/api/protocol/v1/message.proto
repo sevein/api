@@ -56,3 +56,24 @@ message Video {
   int64 duration = 3;
   string format = 4;
 }
+
+message Actor {
+  string id = 1;
+  string parent_id = 2;
+  ActorType entity_type = 3;
+  TranslatedString authorized_form_of_name = 4;
+  google.protobuf.Timestamp created_at = 5 [(buf.validate.field).timestamp.lt_now = true];
+  google.protobuf.Timestamp updated_at = 6;
+  option (buf.validate.message).cel = {
+    id: "actor.updated_at",
+    message: "Update at date must be after creation date",
+    expression: "this.updated_at > this.created_date"
+  };
+}
+
+enum ActorType {
+  ACTOR_TYPE_UNSPECIFIED = 0;
+  ACTOR_TYPE_CORPORATE_BODY = 1;
+  ACTOR_TYPE_PERSON = 2;
+  ACTOR_TYPE_FAMILY = 3;
+}
